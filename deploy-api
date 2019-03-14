@@ -81,9 +81,10 @@ function deploy_api() {
 '
 
   CURRENT_DIR=${PWD##*/}
-  DOCKER_PHP_CONTAINER_ID=""
 
-  api-refresh $CURRENT_DIR
+  api-refresh $CURRENT_DIR $1
+
+  DOCKER_PHP_CONTAINER_ID=""
 
   find_docker_php_container_id $CURRENT_DIR
 
