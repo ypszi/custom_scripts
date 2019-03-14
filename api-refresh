@@ -12,7 +12,7 @@ function get_branch() {
         CURRENT_BRANCH=${GIT_BRANCH:2}
 
         if [[ -n $(git branch | grep "$BRANCH") ]]; then
-            git go "$BRANCH" 2> /dev/null
+            git checkout "$BRANCH" 2> /dev/null
         else
             echo "$BRANCH does not exist. Pulling $CURRENT_BRANCH"
             BRANCH="$CURRENT_BRANCH"
