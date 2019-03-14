@@ -1,0 +1,4 @@
+#!/bin/bash
+
+docker-sync stop
+docker-sync start

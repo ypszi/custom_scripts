@@ -1,0 +1,5 @@
+#!/bin/bash
+
+source app_location.cfg
+
+ls -AClh --color "$ROOT_DIR"

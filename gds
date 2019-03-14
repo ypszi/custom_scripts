@@ -1,0 +1,4 @@
+#!/bin/bash
+
+git diff "$@" --staged > ~/diff.diff
+subl ~/diff.diff

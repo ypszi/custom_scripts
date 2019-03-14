@@ -1,0 +1,3 @@
+#!/bin/bash
+
+dcr o:s:u "$1"

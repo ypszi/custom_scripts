@@ -1,0 +1,4 @@
+#!/bin/bash
+
+git push origin --delete $(git branch | grep "$1")
+git branch -D $(git branch | grep "$1")
