@@ -1,4 +1,8 @@
 #!/bin/bash
 
+source app_location.cfg
+
+cd "$ROOT_DIR/../"
+
 docker-sync stop
 docker-sync start
