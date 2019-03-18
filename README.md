@@ -58,24 +58,29 @@ Refreshes APIs, builds up its docker containers, executes necessary php commands
  - api-refresh
 
 ## dfaps
-### Arguments
-### Dependencies
+
+List all docker containers formatted containing "api".
 
 ## dfps
-### Arguments
-### Dependencies
+
+List all docker containers formatted.
 
 ## docker-compose-deploy
-### Arguments
+
+Refreshes common-docker, builds up its docker containers.
+Refreshes APIs, builds up its docker containers, executes necessary php commands (e.g. doctrine schema update).
+
 ### Dependencies
+
+ - deploy-api
 
 ## docker-compose-restart
-### Arguments
-### Dependencies
+
+Restarts the docker containers based on docker-compose.yml in the current directory.
 
 ## docker-sync-restart
-### Arguments
-### Dependencies
+
+Restarts docker-sync in devenv_installer directory.
 
 ## gallpull
 ### Arguments
