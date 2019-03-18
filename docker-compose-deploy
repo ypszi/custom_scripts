@@ -7,10 +7,6 @@ deploy-api
 
 for API_DIR in $(find "${ROOT_DIR}" -maxdepth 1 -name "*-api"); 
 do
-    cd $API_DIR
-    echo "Working in $API_DIR ..."
-    echo "Building $app..."
-    cd "$ROOT_DIR/$app"
-    git status
+	cd "$API_DIR"
     deploy-api
 done
