@@ -86,45 +86,100 @@ Restarts the docker containers based on docker-compose.yml in the current direct
 Restarts docker-sync in devenv_installer directory.
 
 ## gbdel
+
+Deletes a branch. Both local and origin.
+
 ### Arguments
-### Dependencies
+
+ 1. Branch to be used
 
 ## gd
+
+Creates a git diff export to the home directory and opens it in sublime text.
+
 ### Arguments
+
+ 1. Arguments of git diff
+
 ### Dependencies
+
+ - [Sublime Text](https://www.sublimetext.com)
 
 ## gds
+
+Creates a git diff of staged files export to the home directory and opens it in sublime text.
+
 ### Arguments
+
+ 1. Arguments of git diff
+
 ### Dependencies
+
+ - [Sublime Text](https://www.sublimetext.com)
 
 ## gf
-### Arguments
-### Dependencies
+
+Alias to execute `git fetch --all --prune`.
 
 ## gitall
+
+Executes git command in children directories of working directory.
+
 ### Arguments
-### Dependencies
+
+ 1. Git command
 
 ## glog
+
+Creates a git log export to the home directory and opens it in sublime text.
+
 ### Arguments
+
+ 1. Arguments of git log
+
 ### Dependencies
 
+ - [Sublime Text](https://www.sublimetext.com)
+
 ## gsgo
+
+Smart Git Checkout. Uses stash, checkout, stash pop.
+
 ### Arguments
+
+ 1. Branch to be used
+
 ### Dependencies
 
 ## gspull
-### Arguments
-### Dependencies
+
+Smart Git Pull. Uses stash, pull, stash pop.
 
 ## lsapps
-### Arguments
-### Dependencies
+
+Lists apps from `ROOT_DIR`.
 
 ## osu
+
+Executes doctrine schema update based on the phpfpm container of the current directory.
+
 ### Arguments
+
+ 1. Arguments of doctrine schema update.
+
 ### Dependencies
 
+ - dcr
+
 ## package-release
+
+Deprecated. Sends a notification to Slack about a dh-slim package.
+
 ### Arguments
+
+ 1. package name
+ 2. version
+
 ### Dependencies
+
+ - php
