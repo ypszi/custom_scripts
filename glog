@@ -1,3 +1,4 @@
 #!/bin/bash
 
-git log "$@" > ~/log.log && subl ~/log.log
+git log "$@" > ~/log.log
+subl ~/log.log
