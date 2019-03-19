@@ -1,3 +1,5 @@
 #!/bin/bash
 
-git stash && git checkout "$1" && git stash pop
+git stash
+git checkout "$1"
+git stash pop
