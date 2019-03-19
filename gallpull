@@ -1,3 +1,0 @@
-#!/bin/bash
-
-gitall fs && gitall go master && gitall pull && cpinstall

@@ -24,18 +24,23 @@ function refresh() {
     API_DIR="$1"
     BRANCH_TO_REFRESH="$2"
 
-    cd "$ROOT_DIR/$API_DIR"
-    echo "Working in $API_DIR ..."
+    if [[ -d "$ROOT_DIR/$API_DIR" ]]; then
+        cd "$ROOT_DIR/$API_DIR"
+        echo "Working in $API_DIR ..."
 
-    BRANCH=''
-    get_branch $BRANCH_TO_REFRESH
+        BRANCH=''
+        get_branch $BRANCH_TO_REFRESH
 
-    echo "Fetching ..."
-    gf &> /dev/null
-    echo "Pulling $BRANCH ..."
-    gitall pull &> /dev/null
-    echo "Installing dependencies ..."
-    cpinstall &> /dev/null
+        echo "Fetching ..."
+        gf &> /dev/null
+        echo "Pulling $BRANCH ..."
+        gitall pull &> /dev/null
+        echo "Installing dependencies ..."
+        cpinstall &> /dev/null
+    else
+        echo "$ROOT_DIR/$API_DIR is not a directory."
+        exit 1
+    fi
 }
 
 function api_refresh() {
@@ -51,6 +56,8 @@ function api_refresh() {
     else
         refresh $DIR_TO_REFRESH $BRANCH_TO_REFRESH
     fi
+
+    exit 0
 }
 
 api_refresh $@

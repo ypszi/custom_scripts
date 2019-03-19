@@ -16,10 +16,12 @@ Some of the executables might depend on git aliases:
 
 ## api-refresh
 
-Refreshes APIs.
+Refreshes API(s). Uses Git Fetch, Git Pull, Composer install.
 
 ### Arguments
+
  1. Directory to be used (optional)
+ 	- must be an existing directory in `ROOT_DIR`
 	- if not passed all directories will be used in `ROOT_DIR/*-api`
 	- pass `.` to use current directory
  2. Branch to be used (optional)
@@ -27,6 +29,7 @@ Refreshes APIs.
 	- if passed branch does not exist current branch will be used.
  
 ### Dependencies
+
  - gf
  - gitall
  - cpinstall
@@ -81,10 +84,6 @@ Restarts the docker containers based on docker-compose.yml in the current direct
 ## docker-sync-restart
 
 Restarts docker-sync in devenv_installer directory.
-
-## gallpull
-### Arguments
-### Dependencies
 
 ## gbdel
 ### Arguments
