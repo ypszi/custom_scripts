@@ -1,13 +1,5 @@
 These scripts are here to help development process. 
 
-Some of the executables might depend on git aliases:
- - alias.go=checkout
- - alias.b=branch
- - alias.c=commit
- - alias.st=status
- - alias.cl=clone
- - alias.fs=fetch --all --prune
-
 # Usage
 
  1. Update `app_location.cfg` to the location of your APIs. (It sets a variable called `ROOT_DIR`)
