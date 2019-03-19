@@ -48,9 +48,7 @@ function api_refresh() {
     BRANCH_TO_REFRESH="$2"
 
     if [[ -z "$DIR_TO_REFRESH" ]]; then
-        for API_DIR in $(find "$ROOT_DIR" -maxdepth 1 -name "*-api"); do
-            refresh ${API_DIR##*/} $BRANCH_TO_REFRESH
-        done
+        refresh ${PWD##*/} $BRANCH_TO_REFRESH
     elif [[ "$DIR_TO_REFRESH" == "." ]]; then
         refresh ${PWD##*/} $BRANCH_TO_REFRESH
     else

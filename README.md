@@ -8,7 +8,7 @@ These scripts are here to help development process.
 
 ## api-refresh
 
-Refreshes API(s). Uses Git Fetch, Git Pull, Composer install.
+Refreshes API. Uses Git Fetch, Git Pull, Composer install.
 
 ### Arguments
 
@@ -25,6 +25,18 @@ Refreshes API(s). Uses Git Fetch, Git Pull, Composer install.
  - gf
  - gitall
  - cpinstall
+
+## api-refresh-all
+
+### Arguments
+
+ 1. Branch to be used (optional)
+	- if not passed current branch will be used.
+	- if passed branch does not exist current branch will be used.
+ 
+### Dependencies
+
+ - api-refresh
 
 ## cpinstall
 

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+source app_location.cfg
+
+function api_refresh_all() {
+    BRANCH_TO_REFRESH="$1"
+
+    for API_DIR in $(find "$ROOT_DIR" -maxdepth 1 -name "*-api"); do
+        api-refresh ${API_DIR##*/} $BRANCH_TO_REFRESH
+    done
+
+    exit 0
+}
+
+api_refresh_all "$@"
