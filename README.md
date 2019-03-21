@@ -177,7 +177,7 @@ Executes doctrine schema update based on the phpfpm container of the current dir
 
 ## package-release
 
-Deprecated. Sends a notification to Slack about a dh-slim package.
+Sends a notification to MS Teams about a dh-slim package.
 
 ### Arguments
 
