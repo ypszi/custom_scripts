@@ -23,8 +23,6 @@ Refreshes API. Uses Git Fetch, Git Pull, Composer install.
 ### Dependencies
 
  - gf
- - gitall
- - cpinstall
 
 ## api-refresh-all
 
@@ -152,8 +150,6 @@ Smart Git Checkout. Uses stash, checkout, stash pop.
 ### Arguments
 
  1. Branch to be used
-
-### Dependencies
 
 ## gspull
 
