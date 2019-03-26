@@ -34,9 +34,9 @@ function refresh() {
         echo "Fetching ..."
         gf &> /dev/null
         echo "Pulling $BRANCH ..."
-        gitall pull &> /dev/null
+        git pull &> /dev/null
         echo "Installing dependencies ..."
-        cpinstall &> /dev/null
+        composer install &> /dev/null
     else
         echo "$ROOT_DIR/$API_DIR is not a directory."
         exit 1
