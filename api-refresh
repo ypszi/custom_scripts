@@ -2,6 +2,21 @@
 
 source app_location.cfg
 
+function show_help() {
+    cat << EOF 
+Usage: api-refresh [OPTION...]
+
+  -d    Directory to be used (optional)
+          - must be an existing directory in "ROOT_DIR"
+          - if not passed all directories will be used in "ROOT_DIR/*-api"
+          - pass "." to use current directory
+  -b    Branch to be used (optional)
+          - if not passed current branch will be used.
+          - if passed branch does not exist current branch will be used.
+  -?    Prints this help
+EOF
+}
+
 function get_branch() {
     BRANCH_TO_REFRESH="$1"
 
@@ -36,7 +51,7 @@ function refresh() {
         get_branch $BRANCH_TO_REFRESH
 
         echo "Fetching ..."
-        gf &> /dev/null
+        git fetch --all --prune &> /dev/null
         CHECKOUT_MESSAGE=$(git checkout "$BRANCH" 2>&1 > /dev/null)
 
         if [[ $? == 1 ]]; then
@@ -79,4 +94,20 @@ function api_refresh() {
     exit 0
 }
 
-api_refresh $@
+DIR_TO_REFRESH=""
+BRANCH_TO_REFRESH=""
+
+while getopts "d:b:h?" opt; do
+    case "$opt" in
+    d)  DIR_TO_REFRESH=$OPTARG
+        ;;
+    b)  BRANCH_TO_REFRESH=$OPTARG
+        ;;
+    h|\?)
+        show_help
+        exit 0
+        ;;
+    esac
+done
+
+api_refresh $DIR_TO_REFRESH $BRANCH_TO_REFRESH

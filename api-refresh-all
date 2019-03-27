@@ -2,14 +2,39 @@
 
 source app_location.cfg
 
+function show_help() {
+    cat << EOF 
+Usage: api-refresh-all [OPTION...]
+
+  -b    Branch to be used (optional)
+          - if not passed current branch will be used.
+          - if passed branch does not exist current branch will be used.
+  -?    Prints this help
+EOF
+}
+
 function api_refresh_all() {
     BRANCH_TO_REFRESH="$1"
 
-    for API_DIR in $(find "$ROOT_DIR" -maxdepth 1 -name "*-api"); do
+    for API_DIR in $(find "$ROOT_DIR" -maxdepth 1 -name "*-api" | sort); do
+    	cd $API_DIR
         api-refresh ${API_DIR##*/} $BRANCH_TO_REFRESH
     done
 
     exit 0
 }
 
-api_refresh_all "$@"
+BRANCH_TO_REFRESH=""
+
+while getopts "b:h?" opt; do
+    case "$opt" in
+    b)  BRANCH_TO_REFRESH=$OPTARG
+        ;;
+    h|\?)
+        show_help
+        exit 0
+        ;;
+    esac
+done
+
+api_refresh_all $BRANCH_TO_REFRESH

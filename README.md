@@ -10,28 +10,10 @@ These scripts are here to help development process.
 
 Refreshes API. Uses Git Fetch, Git Pull, Composer install.
 
-### Arguments
-
- 1. Directory to be used (optional)
- 	- must be an existing directory in `ROOT_DIR`
-	- if not passed all directories will be used in `ROOT_DIR/*-api`
-	- pass `.` to use current directory
- 2. Branch to be used (optional)
-	- if not passed current branch will be used.
-	- if passed branch does not exist current branch will be used.
- 
-### Dependencies
-
- - gf
-
 ## api-refresh-all
 
-### Arguments
+Refreshes APIs in `ROOT_DIR`. Uses Git Fetch, Git Pull, Composer install.
 
- 1. Branch to be used (optional)
-	- if not passed current branch will be used.
-	- if passed branch does not exist current branch will be used.
- 
 ### Dependencies
 
  - api-refresh
