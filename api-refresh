@@ -3,18 +3,20 @@
 source app_location.cfg
 
 function get_branch() {
+    BRANCH_TO_REFRESH="$1"
+
     if [[ -z "$BRANCH_TO_REFRESH" ]]; then
         GIT_BRANCH=$(git branch | grep "*")
         BRANCH=${GIT_BRANCH:2}
     else
         BRANCH="$BRANCH_TO_REFRESH"
-        GIT_BRANCH=$(git branch | grep "*")
-        CURRENT_BRANCH=${GIT_BRANCH:2}
 
-        if [[ -n $(git branch | grep "$BRANCH") ]]; then
-            git checkout "$BRANCH" 2> /dev/null
-        else
-            echo "$BRANCH does not exist. Pulling $CURRENT_BRANCH"
+        if [[ -z $(git branch | grep "$BRANCH") ]]; then
+            GIT_BRANCH=$(git branch | grep "*")
+            CURRENT_BRANCH=${GIT_BRANCH:2}
+
+            echo "$BRANCH does not exist. Branch set to $CURRENT_BRANCH"
+
             BRANCH="$CURRENT_BRANCH"
         fi
     fi
@@ -29,12 +31,23 @@ function refresh() {
         echo "Working in $API_DIR ..."
 
         BRANCH=''
+        ERROR_MESSAGE=''
+
         get_branch $BRANCH_TO_REFRESH
 
         echo "Fetching ..."
         gf &> /dev/null
+        CHECKOUT_MESSAGE=$(git checkout "$BRANCH" 2>&1 > /dev/null)
+
+        if [[ $? == 1 ]]; then
+            echo "An error occurred when tried to checkout $BRANCH:"
+            echo "$CHECKOUT_MESSAGE"
+            exit 1
+        fi
+
         echo "Pulling $BRANCH ..."
         git pull &> /dev/null
+
         echo "Installing dependencies ..."
         composer install &> /dev/null
     else
