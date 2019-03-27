@@ -48,8 +48,16 @@ function refresh() {
         echo "Pulling $BRANCH ..."
         git pull &> /dev/null
 
-        echo "Installing dependencies ..."
+        echo -n "Installing dependencies "
+        while true; do echo -n "."; sleep 1; done &
+        trap 'kill $!' SIGTERM SIGKILL
+
         composer install &> /dev/null
+
+        kill $!
+
+        echo -e "\nDone."
+        exit 0
     else
         echo "$ROOT_DIR/$API_DIR is not a directory."
         exit 1
