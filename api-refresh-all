@@ -17,7 +17,7 @@ function api_refresh_all() {
     BRANCH_TO_REFRESH="$1"
 
     for API_DIR in $(find "$ROOT_DIR" -maxdepth 1 -name "*-api" | sort); do
-    	cd $API_DIR
+        cd $API_DIR
         api-refresh ${API_DIR##*/} $BRANCH_TO_REFRESH
     done
 
