@@ -7,6 +7,6 @@ deploy-api
 
 for API_DIR in $(find "${ROOT_DIR}" -maxdepth 1 -name "*-api"); 
 do
-	cd "$API_DIR"
+    cd "$API_DIR"
     deploy-api
 done
