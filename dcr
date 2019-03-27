@@ -1,7 +1,54 @@
 #!/bin/bash
 
-CURRENT_DIR=${PWD##*/}
-DOCKER_PHP_CONTAINER_NAME="$(echo $CURRENT_DIR | sed -e 's/-/_/g')_phpfpm"
-DOCKER_PHP_CONTAINER_ID="$(docker container ls -q --filter name=$DOCKER_PHP_CONTAINER_NAME)"
+function show_help() {
+    cat << EOF 
+Usage: dcr [OPTION...] [COMMAND] [ARGUMENTS]
+
+  -c    Docker Container ID (Optional)
+  -n    Docker Container Name (Optional)
+  -?    Prints this help
+EOF
+}
+
+function get_container_id_by_name() {
+    DOCKER_PHP_CONTAINER_NAME=$1
+    DOCKER_PHP_CONTAINER_ID="$(docker container ls -q --filter name=$DOCKER_PHP_CONTAINER_NAME)"
+}
+
+function get_container_id() {
+    CURRENT_DIR=${PWD##*/}
+    DOCKER_PHP_CONTAINER_NAME="$(echo $CURRENT_DIR | sed -e 's/-/_/g')_phpfpm"
+
+    get_container_id_by_name $DOCKER_PHP_CONTAINER_NAME
+}
+
+DOCKER_PHP_CONTAINER_ID=""
+
+while getopts "c:n:h?" opt; do
+    case "$opt" in
+    c)  DOCKER_PHP_CONTAINER_ID=$OPTARG
+        ;;
+    n)  DOCKER_PHP_CONTAINER_NAME=$OPTARG
+        DOCKER_PHP_CONTAINER_ID="$(docker container ls -q --filter name=$DOCKER_PHP_CONTAINER_NAME)"
+
+        if [[ -z $DOCKER_PHP_CONTAINER_ID ]]; then
+            echo "Container id not found for name: $DOCKER_PHP_CONTAINER_NAME"
+            exit 1
+        elif [[ $(echo "$DOCKER_PHP_CONTAINER_ID" | wc -l) -gt 1 ]]; then
+            echo "Please specify a more detailed container name. Multiple container id found for name: $DOCKER_PHP_CONTAINER_NAME"
+            exit 1
+        fi
+        ;;
+    h|\?)
+        show_help
+        exit 0
+        ;;
+    esac
+done
+shift $((OPTIND -1))
+
+if [[ -z $DOCKER_PHP_CONTAINER_ID ]]; then
+    get_container_id
+fi
 
 docker exec -ti "$DOCKER_PHP_CONTAINER_ID" bin/console --env=docker "$@"
