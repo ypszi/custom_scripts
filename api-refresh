@@ -79,21 +79,6 @@ function refresh() {
     fi
 }
 
-function api_refresh() {
-    DIR_TO_REFRESH="$1"
-    BRANCH_TO_REFRESH="$2"
-
-    if [[ -z "$DIR_TO_REFRESH" ]]; then
-        refresh ${PWD##*/} $BRANCH_TO_REFRESH
-    elif [[ "$DIR_TO_REFRESH" == "." ]]; then
-        refresh ${PWD##*/} $BRANCH_TO_REFRESH
-    else
-        refresh $DIR_TO_REFRESH $BRANCH_TO_REFRESH
-    fi
-
-    exit 0
-}
-
 DIR_TO_REFRESH=""
 BRANCH_TO_REFRESH=""
 
@@ -109,5 +94,14 @@ while getopts "d:b:h?" opt; do
         ;;
     esac
 done
+shift $((OPTIND -1))
 
-api_refresh $DIR_TO_REFRESH $BRANCH_TO_REFRESH
+if [[ -z "$DIR_TO_REFRESH" ]]; then
+    refresh ${PWD##*/} $BRANCH_TO_REFRESH
+elif [[ "$DIR_TO_REFRESH" == "." ]]; then
+    refresh ${PWD##*/} $BRANCH_TO_REFRESH
+else
+    refresh $DIR_TO_REFRESH $BRANCH_TO_REFRESH
+fi
+
+exit 0
