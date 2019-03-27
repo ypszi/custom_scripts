@@ -7,8 +7,8 @@ function show_help() {
 Usage: api-refresh [OPTION...]
 
   -d    Directory to be used (optional)
+          - if not passed current directory will be used.
           - must be an existing directory in "ROOT_DIR"
-          - if not passed all directories will be used in "ROOT_DIR/*-api"
           - pass "." to use current directory
   -b    Branch to be used (optional)
           - if not passed current branch will be used.
