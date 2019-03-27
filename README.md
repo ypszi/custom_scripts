@@ -26,10 +26,6 @@ Executes a `composer install` in each directory in `ROOT_DIR/*-api`.
 
 Executes a php command via docker.
 
-### Arguments
- 1. Name of the executable command
- 2. Arguments of command
-
 ## deploy-api
 
 Refreshes APIs, builds up its docker containers, executes necessary php commands (e.g. doctrine schema update).
