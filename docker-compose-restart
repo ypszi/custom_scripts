@@ -3,7 +3,7 @@
 DOCKER_FILE=$(find ./ -maxdepth 1 -name "docker-compose.yml")
 
 if [ ! -z $DOCKER_FILE ]; then
-    docker-compose down
+    docker-compose down --remove-orphans
     docker-compose up -d --build
 
     exit 0
