@@ -30,15 +30,10 @@ Executes a php command via docker.
 
 Refreshes APIs, builds up its docker containers, executes necessary php commands (e.g. doctrine schema update).
 
-### Arguments
-
- 1. Branch to be used (optional)
-	- if not passed current branch will be used.
-	- if passed branch does not exist current branch will be used.
-
 ### Dependencies
 
  - api-refresh
+ - dcr
 
 ## dfaps
 

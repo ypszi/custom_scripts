@@ -1,12 +1,33 @@
 #!/bin/bash
 
+function show_help() {
+    cat << EOF 
+Usage: deploy-api [OPTION...]
+
+  -a    API to be deployed (optional)
+          - if not passed current directory will be used.
+          - must be an existing directory in "ROOT_DIR"
+          - pass "." to use current directory
+  -b    Branch to be used (optional)
+          - if not passed current branch will be used.
+          - if passed branch does not exist current branch will be used.
+  -r    To rebuild containers
+  -?    Prints this help
+EOF
+}
+
 function in_array() {
 : '
+  Usage: in_array [NEEDLE] [HAYSTACK...]
+
   $1 must be an element to be searched in $2
 '
-  for element in "${@:2}"
+  NEEDLE=$1
+  HAYSTACK=${@:2}
+
+  for element in $HAYSTACK
   do
-    if [[ $element == "$1" ]]; then
+    if [[ $element == $NEEDLE ]]; then
       return 0
       fi
   done
@@ -16,6 +37,8 @@ function in_array() {
 
 function find_docker_php_container_id() {
 : '
+  Usage: find_docker_php_container_id [DIRECTORY]
+
   $1 must be a directory with name of a docker container. 
   e.g. admin-api -> admin_api_phpfpm will be searched
 '
@@ -41,21 +64,13 @@ function wait_docker_container_to_start() {
   done;
 }
 
-function run_command() {
-: '
-  $1 must be a docker container identifier
-  ${@:2} must be a docker executable php command + its arguments
-'
-  docker exec -ti "$1" bin/console --env=docker "${@:2}"
-}
-
 function run_commands() {
 : '
-  $1 must be an array of docker executable php commands + its arguments
-  $2 must be a docker container identifier
+  $1 must be a docker container identifier
+  $2 must be an array of docker executable php commands + its arguments
 '
-  for command in "$1"; do
-    run_command "$2" "$command"
+  for command in "${@:2}"; do
+    dcr -c "$1" "$command"
   done
 }
 
@@ -69,24 +84,56 @@ function run_doctrine_schema_update() {
   in_array "$1" ${NO_DATABASE_SCHEMA_UPDATE_NEEDED[@]}
 
   if [[ $? -ne 0 ]]; then
-      echo "Updating database schema..."
-      run_command "$2" o:s:u --dump-sql
-      run_command "$2" o:s:u -f
+    echo "Updating database schema..."
+
+    dcr -c "$2" o:s:u --dump-sql
+    dcr -c "$2" o:s:u -f
+  else
+    echo "Skipping database schema update."
   fi
 }
 
-function deploy_api() {
-: '
-  $1 is optional: a git branch to be deployed
-'
+API_TO_DEPLOY=""
+BRANCH_TO_DEPLOY=""
+REBUILD_CONTAINERS=false
 
-  CURRENT_DIR=${PWD##*/}
+while getopts "a:b:rh?" opt; do
+    case "$opt" in
+    a)  API_TO_DEPLOY=$OPTARG
+        ;;
+    b)  BRANCH_TO_DEPLOY=$OPTARG
+        ;;
+    r)  REBUILD_CONTAINERS=true
+        ;;
+    h|\?)
+        show_help
+        exit 0
+        ;;
+    esac
+done
+shift $((OPTIND -1))
 
-  api-refresh $CURRENT_DIR $1
+CURRENT_DIR=${PWD##*/}
+DIR_TO_USE="$API_TO_DEPLOY"
 
-  DOCKER_PHP_CONTAINER_ID=""
+if [[ -z "$API_TO_DEPLOY" ]]; then
+  DIR_TO_USE="$CURRENT_DIR"
+elif [[ "$API_TO_DEPLOY" == "." ]]; then
+  DIR_TO_USE="$CURRENT_DIR"
+fi
 
-  find_docker_php_container_id $CURRENT_DIR
+if [[ -z "$BRANCH_TO_DEPLOY" ]]; then
+  api-refresh -d $DIR_TO_USE
+else
+  api-refresh -d $DIR_TO_USE -b $BRANCH_TO_DEPLOY
+fi
+
+DOCKER_PHP_CONTAINER_ID=""
+
+find_docker_php_container_id $DIR_TO_USE
+
+if [[ "$REBUILD_CONTAINERS" == true ]]; then
+  cd "$DIR_TO_USE"
 
   if [[ -n "$DOCKER_PHP_CONTAINER_ID" ]] && [[ "$(is_docker_container_running $DOCKER_PHP_CONTAINER_ID)" ]]; then
       docker-compose down --remove-orphans &> /dev/null
@@ -95,32 +142,30 @@ function deploy_api() {
   echo "Rebuilding docker containers..."
   docker-compose up -d --build &> /dev/null
 
-  find_docker_php_container_id $CURRENT_DIR
+  find_docker_php_container_id $DIR_TO_USE
 
   if [[ -z "$DOCKER_PHP_CONTAINER_ID" ]]; then
-    echo "Cannot start docker container of $CURRENT_DIR"
+    echo "Cannot start docker container of $DIR_TO_USE"
     exit 1
   fi
 
   wait_docker_container_to_start $DOCKER_PHP_CONTAINER_ID
+fi
 
-  echo "$DOCKER_PHP_CONTAINER_ID is up-to-date and running."
+echo "$DOCKER_PHP_CONTAINER_ID is up-to-date and running."
 
-  run_doctrine_schema_update $CURRENT_DIR $DOCKER_PHP_CONTAINER_ID
+run_doctrine_schema_update $DIR_TO_USE $DOCKER_PHP_CONTAINER_ID
 
-  ADMIN_API_COMMANDS=("admin:action:import-actions")
-  DATA_PRIVACY_API_COMMANDS=("data-right:import")
-  GATEWAY_API_COMMANDS=("routes:generate:from-openapi-services")
+ADMIN_API_COMMANDS=("admin:action:import-actions")
+DATA_PRIVACY_API_COMMANDS=("data-right:import")
+GATEWAY_API_COMMANDS=("routes:generate:from-openapi-services")
 
-  echo "Running commands in $CURRENT_DIR..."
+echo "Running commands in $DIR_TO_USE..."
 
-  if [[ $CURRENT_DIR == "admin-api" ]]; then
-    run_commands $ADMIN_API_COMMANDS $DOCKER_PHP_CONTAINER_ID
-  elif [[ $CURRENT_DIR == "data-privacy-api" ]]; then
-    run_commands $DATA_PRIVACY_API_COMMANDS $DOCKER_PHP_CONTAINER_ID
-  elif [[ $CURRENT_DIR == "gateway-api" ]]; then
-    run_commands $GATEWAY_API_COMMANDS $DOCKER_PHP_CONTAINER_ID
-  fi
-}
-
-deploy_api $@
+if [[ $DIR_TO_USE == "admin-api" ]]; then
+  run_commands $DOCKER_PHP_CONTAINER_ID $ADMIN_API_COMMANDS
+elif [[ $DIR_TO_USE == "data-privacy-api" ]]; then
+  run_commands $DOCKER_PHP_CONTAINER_ID $DATA_PRIVACY_API_COMMANDS
+elif [[ $DIR_TO_USE == "gateway-api" ]]; then
+  run_commands $DOCKER_PHP_CONTAINER_ID $GATEWAY_API_COMMANDS
+fi
