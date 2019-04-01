@@ -68,6 +68,10 @@ Deletes a branch. Both local and origin.
 
  1. Branch to be used
 
+## gcm
+
+Deletes all branch merged to passed branch. (Optional: `develop` is used by default)
+
 ## gd
 
 Creates a git diff export to the home directory and opens it in sublime text.

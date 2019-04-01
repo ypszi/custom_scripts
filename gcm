@@ -1,0 +1,34 @@
+#!/bin/bash
+
+
+function show_help() {
+    cat << EOF 
+Usage: gcm [OPTION...] [COMMAND] [ARGUMENTS]
+
+  -b    Branch to use (Optional: develop by default)
+  -?    Prints this help
+EOF
+}
+
+BRANCH="develop"
+
+while getopts "b:h?" opt; do
+    case "$opt" in
+    b)  BRANCH=$OPTARG
+        ;;
+    h|\?)
+        show_help
+        exit 0
+        ;;
+    esac
+done
+shift $((OPTIND -1))
+
+echo "Are you sure you want to clear all branches merged to $BRANCH? (y/n)"
+read RESPONSE
+
+if [[ $RESPONSE == "y" ]]; then
+    git fetch --all --prune
+    git checkout "$BRANCH"
+    git branch -ar --merged | grep -v "\b$BRANCH\b" | cut -c10- | xargs -L1 git push origin --delete
+fi
