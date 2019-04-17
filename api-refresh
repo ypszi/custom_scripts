@@ -51,7 +51,8 @@ function refresh() {
         get_branch $BRANCH_TO_REFRESH
 
         echo "Fetching ..."
-        git fetch --all --prune &> /dev/null
+        git fetch --all --prune
+        
         CHECKOUT_MESSAGE=$(git checkout "$BRANCH" 2>&1 > /dev/null)
 
         if [[ $? == 1 ]]; then
