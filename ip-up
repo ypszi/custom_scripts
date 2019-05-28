@@ -1,0 +1,81 @@
+#!/bin/bash
+
+function show_help() {
+    cat << EOF 
+Usage: ip-up [OPTION...]
+
+  -a    To add routes
+  -d    To delete routes
+  -?    Prints this help
+EOF
+}
+
+function route_add() {
+    DEVICE=$(ip a | grep "tap0:" | awk '{print $2}' | cut -d ":" -f 1);
+    IP=$(ip a | grep $DEVICE | grep inet | awk '{print $2}' | cut -d "/" -f 1);
+
+    ip route add "$1" via "$IP" dev "$DEVICE"
+}
+
+function check_route() {
+    ROUTE=$(ip route | grep "$1")
+
+    if [[ -z $ROUTE ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
+function add_routes() {
+    COUNT=0
+
+    for route in "${ROUTES[@]}"; do
+        check_route "$route"
+
+        if [[ $? == 0 ]]; then
+            route_add "$route"
+            ((COUNT++))
+        fi
+    done
+
+    echo "$COUNT routes added"
+}
+
+function delete_routes() {
+    COUNT=0
+
+    for route in "${ROUTES[@]}"; do
+        check_route "$route"
+
+        if [[ $? == 1 ]]; then
+            ip route del "$route"
+            ((COUNT++))
+        fi
+    done
+
+    echo "$COUNT routes deleted"
+}
+
+ROUTES=("192.168.0.0/21" "10.100.0.0/16")
+
+while getopts "adh?" opt; do
+    case "$opt" in
+    a)  add_routes
+        ;;
+    d)  delete_routes
+        ;;
+    h|\?)
+        show_help
+        exit 0
+        ;;
+    esac
+done
+shift $((OPTIND -1))
+
+if [ $OPTIND -eq 1 ]; then 
+    show_help
+    exit 1
+else
+    ip route
+fi

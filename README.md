@@ -132,6 +132,10 @@ Smart Git Checkout. Uses stash, checkout, stash pop.
 
 Smart Git Pull. Uses stash, pull, stash pop.
 
+## ip-up
+
+Used to add or delete IP routes.
+
 ## lsapps
 
 Lists apps from `ROOT_DIR`.
