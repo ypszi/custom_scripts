@@ -1,0 +1,4 @@
+#!/bin/bash
+
+killall pppd
+/usr/local/bin/ip-up -d
