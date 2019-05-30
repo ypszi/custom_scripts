@@ -11,10 +11,9 @@ EOF
 }
 
 function route_add() {
-    DEVICE=$(ip a | grep "tap0:" | awk '{print $2}' | cut -d ":" -f 1);
-    IP=$(ip a | grep $DEVICE | grep inet | awk '{print $2}' | cut -d "/" -f 1);
+    DEVICE=$(ip a | grep "ppp0:" | awk '{print $2}' | cut -d ":" -f 1);
 
-    ip route add "$1" via "$IP" dev "$DEVICE"
+    ip route add "$1" dev "$DEVICE"
 }
 
 function check_route() {
