@@ -1,0 +1,17 @@
+#!/bin/bash
+
+DIR=$(realpath "$1")
+cd $DIR
+
+CURRENT_DIR=${PWD##*/}
+ME=$(whoami)
+LOG_FILE=~/log/rsync/$CURRENT_DIR.log
+
+if [[ ! -f "$LOG_FILE"  ]]; then
+	mkdir -p ~/log/rsync
+	touch "$LOG_FILE"
+fi
+
+while inotifywait -dr -o "$LOG_FILE" -e create,modify,delete,move --exclude=".idea|.git|.*___jb_tmp___" "$DIR"/; do
+	rsync -rae ssh "$DIR"/* dhdevel:/home/peter.pecosz/livejasmin/"$CURRENT_DIR"/master/
+done
