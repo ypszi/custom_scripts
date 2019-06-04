@@ -18,6 +18,6 @@ if ssh dhdevel "[ ! -d $REMOTE_DIR ]"; then
 	ssh dhdevel "mkdir -p $REMOTE_DIR"
 fi
 
-while inotifywait -dr -o "$LOG_FILE" -e create,modify,delete,move --exclude=".idea|.git|.*___jb_tmp___" "$DIR"/; do
+while inotifywait -r -o "$LOG_FILE" -e create,modify,delete,move --exclude=".idea|.git|.*___jb_tmp___" "$DIR"/; do
 	rsync -rae ssh "$DIR"/* dhdevel:"$REMOTE_DIR"
 done
