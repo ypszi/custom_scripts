@@ -1,0 +1,5 @@
+#!/bin/bash
+
+CURRENT_BRANCH=$(git b | grep "*" | cut -d "/" -f 2 | cut -d "-" -f 1,2)
+
+git commit -m "$CURRENT_BRANCH $1"
