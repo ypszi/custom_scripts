@@ -12,12 +12,26 @@ if [[ ! -f "$LOG_FILE"  ]]; then
 	touch "$LOG_FILE"
 fi
 
-REMOTE_DIR=/home/peter.pecosz/jasmin/"$CURRENT_DIR"/master/
+REMOTE_DIRS=()
 
-if ssh dhdevel "[ ! -d $REMOTE_DIR ]"; then
-	ssh dhdevel "mkdir -p $REMOTE_DIR"
+if [[ -n "${@:2}" ]]; then
+	for dir in "${@:2}"; do
+		REMOTE_DIRS+=(/home/peter.pecosz/jasmin/"$dir"/master/)
+	done
+else
+	REMOTE_DIRS=(/home/peter.pecosz/jasmin/"$CURRENT_DIR"/master/)
 fi
 
+for REMOTE_DIR in ${REMOTE_DIRS[@]}
+do
+	if ssh dhdevel "[ ! -d $REMOTE_DIR ]"; then
+		ssh dhdevel "mkdir -p $REMOTE_DIR"
+	fi
+done
+
 while inotifywait -r -o "$LOG_FILE" -e create,modify,delete,move --exclude=".idea|.git|.*___jb_tmp___" "$DIR"/; do
-	rsync -rae ssh "$DIR"/* dhdevel:"$REMOTE_DIR"
+	for REMOTE_DIR in ${REMOTE_DIRS[@]}
+	do
+		rsync -rae ssh "$DIR"/* dhdevel:"$REMOTE_DIR"
+	done
 done
