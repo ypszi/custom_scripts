@@ -13,10 +13,16 @@ EOF
 function route_add() {
     DEVICE=$(ip a | grep "ppp0:" | awk '{print $2}' | cut -d ":" -f 1);
 
-    ip route add "$1" dev "$DEVICE"
+    if [[ -n $DEVICE ]]; then
+        ip route add "$1" dev "$DEVICE"
+
+        return 0
+    fi
+
+    return 1
 }
 
-function check_route() {
+function is_route_existing() {
     ROUTE=$(ip route | grep "$1")
 
     if [[ -z $ROUTE ]]; then
@@ -30,11 +36,14 @@ function add_routes() {
     COUNT=0
 
     for route in "${ROUTES[@]}"; do
-        check_route "$route"
+        is_route_existing "$route"
 
         if [[ $? == 0 ]]; then
             route_add "$route"
-            ((COUNT++))
+
+            if [[ $? == 0 ]]; then
+                ((COUNT++))
+            fi
         fi
     done
 
@@ -45,11 +54,14 @@ function delete_routes() {
     COUNT=0
 
     for route in "${ROUTES[@]}"; do
-        check_route "$route"
+        is_route_existing "$route"
 
         if [[ $? == 1 ]]; then
             ip route del "$route"
-            ((COUNT++))
+
+            if [[ $? == 0 ]]; then
+                ((COUNT++))
+            fi
         fi
     done
 
