@@ -1,5 +1,23 @@
 #!/bin/bash
 
+function get_remote_branch() {
+	GIT_BRANCH=$(git branch | grep "*")
+	BRANCH=${GIT_BRANCH:2}
+	REMOTE_BRANCH=$(echo "$BRANCH" | sed 's/\//\-/g' | cut -f 1-3 -d "-" | tr '[:upper:]' '[:lower:]')
+}
+
+function create_remote_directories() {
+	REMOTE_DIRS=()
+
+	if [[ -n "${@:2}" ]]; then
+		for dir in "${@:2}"; do
+			REMOTE_DIRS+=(/home/peter.pecosz/jasmin/"$dir"/"$REMOTE_BRANCH"/)
+		done
+	else
+		REMOTE_DIRS=(/home/peter.pecosz/jasmin/"$CURRENT_DIR"/"$REMOTE_BRANCH"/)
+	fi
+}
+
 DIR=$(realpath "$1")
 cd $DIR
 
@@ -12,15 +30,14 @@ if [[ ! -f "$LOG_FILE"  ]]; then
 	touch "$LOG_FILE"
 fi
 
+
+REMOTE_BRANCH=""
+
+get_remote_branch
+
 REMOTE_DIRS=()
 
-if [[ -n "${@:2}" ]]; then
-	for dir in "${@:2}"; do
-		REMOTE_DIRS+=(/home/peter.pecosz/jasmin/"$dir"/master/)
-	done
-else
-	REMOTE_DIRS=(/home/peter.pecosz/jasmin/"$CURRENT_DIR"/master/)
-fi
+create_remote_directories
 
 for REMOTE_DIR in ${REMOTE_DIRS[@]}
 do
@@ -30,6 +47,12 @@ do
 done
 
 while inotifywait -r -o "$LOG_FILE" -e create,modify,delete,move --exclude=".idea|.git|.*___jb_tmp___" "$DIR"/; do
+	get_remote_branch
+
+	REMOTE_DIRS=()
+
+	create_remote_directories
+
 	for REMOTE_DIR in ${REMOTE_DIRS[@]}
 	do
 		rsync -rae ssh "$DIR"/* dhdevel:"$REMOTE_DIR"
