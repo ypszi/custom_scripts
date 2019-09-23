@@ -8,7 +8,7 @@ Usage: api-refresh [OPTION...]
 
   -d    Directory to be used (optional)
           - if not passed current directory will be used.
-          - must be an existing directory in "ROOT_DIR"
+          - must be a existing git directory
           - pass "." to use current directory
   -b    Branch to be used (optional)
           - if not passed current branch will be used.
@@ -41,8 +41,8 @@ function refresh() {
     API_DIR="$1"
     BRANCH_TO_REFRESH="$2"
 
-    if [[ -d "$ROOT_DIR/$API_DIR" ]]; then
-        cd "$ROOT_DIR/$API_DIR"
+    if [[ -d "$API_DIR" ]]; then
+        cd "$API_DIR"
         echo "Working in $API_DIR ..."
 
         BRANCH=''
@@ -75,7 +75,7 @@ function refresh() {
         echo -e "\nDone."
         exit 0
     else
-        echo "$ROOT_DIR/$API_DIR is not a directory."
+        echo "$API_DIR is not a directory."
         exit 1
     fi
 }
@@ -98,9 +98,9 @@ done
 shift $((OPTIND -1))
 
 if [[ -z "$DIR_TO_REFRESH" ]]; then
-    refresh ${PWD##*/} $BRANCH_TO_REFRESH
+    refresh "$PWD" $BRANCH_TO_REFRESH
 elif [[ "$DIR_TO_REFRESH" == "." ]]; then
-    refresh ${PWD##*/} $BRANCH_TO_REFRESH
+    refresh "$PWD" $BRANCH_TO_REFRESH
 else
     refresh $DIR_TO_REFRESH $BRANCH_TO_REFRESH
 fi
