@@ -11,10 +11,10 @@ function create_remote_paths() {
 
 	if [[ -n "${@:2}" ]]; then
 		for dir in "${@:2}"; do
-			REMOTE_PATHS+=(/home/peter.pecosz/jasmin/"$dir"/"$REMOTE_BRANCH"/)
+			REMOTE_PATHS+=(/home/peter.pecosz/projects/"$dir"/"$REMOTE_BRANCH"/)
 		done
 	else
-		REMOTE_PATHS=(/home/peter.pecosz/jasmin/"$CURRENT_DIR"/"$REMOTE_BRANCH"/)
+		REMOTE_PATHS=(/home/peter.pecosz/projects/"$CURRENT_DIR"/"$REMOTE_BRANCH"/)
 	fi
 }
 
