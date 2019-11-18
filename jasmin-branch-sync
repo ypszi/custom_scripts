@@ -1,6 +1,12 @@
 #!/bin/bash
 
 CURRENT_DIR=${PWD##*/}
+
+if [[ -z $(ls -a | grep "^.git$") ]]; then
+	echo "$PWD" is not a git repository.
+	exit 1
+fi
+
 LOG_DIR=/var/log/jasmin-branch-sync
 LOG_FILE="$LOG_DIR"/"$CURRENT_DIR".log
 
