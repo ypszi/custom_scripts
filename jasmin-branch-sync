@@ -1,0 +1,40 @@
+#!/bin/bash
+
+CURRENT_DIR=${PWD##*/}
+LOG_DIR=/var/log/jasmin-branch-sync
+LOG_FILE="$LOG_DIR"/"$CURRENT_DIR".log
+
+if [[ ! -f "$LOG_FILE"  ]]; then
+	mkdir -p "$LOG_DIR"
+	touch "$LOG_FILE"
+fi
+
+REMOTE_DIR=/home/peter.pecosz/projects/"$CURRENT_DIR"/
+
+DIR_BRANCH_NAMES=()
+for BRANCH in $(git branch | sed 's/*//g')
+do
+	DIR_BRANCH_NAME=$(echo "$BRANCH" | sed 's/\//\-/g' | cut -f 1-3 -d "-" | tr '[:upper:]' '[:lower:]')
+
+	DIR_BRANCH_NAMES+=("$DIR_BRANCH_NAME")
+done
+
+REMOTE_BRANCH_DIRS=$(ssh dhdevel "ls $REMOTE_DIR")
+
+for REMOTE_DIR_BRANCH_NAME in ${REMOTE_BRANCH_DIRS[@]}
+do
+	DIR_TO_REMOVE="$REMOTE_DIR_BRANCH_NAME"
+
+	for DIR_BRANCH_NAME in ${DIR_BRANCH_NAMES[@]}
+	do
+		if [[ $DIR_BRANCH_NAME == $REMOTE_DIR_BRANCH_NAME ]]; then
+			DIR_TO_REMOVE=""
+		fi
+	done
+
+	if [[ -n $DIR_TO_REMOVE ]]; then
+		ssh dhdevel "rm -rf $REMOTE_DIR$DIR_TO_REMOVE"
+
+		echo "$REMOTE_DIR$DIR_TO_REMOVE removed." >> $LOG_FILE
+	fi
+done
