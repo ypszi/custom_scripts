@@ -46,7 +46,7 @@ do
 	fi
 done
 
-while inotifywait -r -o "$LOG_FILE" -e create,modify,delete,move --exclude=".idea|.git|.*___jb_tmp___" "$DIR"/; do
+while inotifywait -r -o "$LOG_FILE" --format "[$(date +"%Y-%m-%d %T")] %w %e %f" -e create,modify,delete,move --exclude=".idea|.git|.*___jb_tmp___" "$DIR"/; do
 	get_remote_branch
 
 	REMOTE_PATHS=()

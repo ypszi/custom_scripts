@@ -41,6 +41,6 @@ do
 	if [[ -n $DIR_TO_REMOVE ]]; then
 		ssh dhdevel "rm -rf $REMOTE_DIR$DIR_TO_REMOVE"
 
-		echo "$REMOTE_DIR$DIR_TO_REMOVE removed." >> $LOG_FILE
+		echo "[$(date +"%Y-%m-%d %T")] $REMOTE_DIR$DIR_TO_REMOVE removed." >> $LOG_FILE
 	fi
 done
