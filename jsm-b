@@ -1,0 +1,10 @@
+#!/bin/bash
+
+function get_remote_branch() {
+  GIT_BRANCH=$(git branch | grep "*")
+  BRANCH=${GIT_BRANCH:2}
+
+  echo "$BRANCH" | sed 's/\//\-/g' | cut -f 1-3 -d "-" | tr '[:upper:]' '[:lower:]'
+}
+
+get_remote_branch
