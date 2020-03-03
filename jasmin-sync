@@ -18,8 +18,12 @@ function create_remote_paths() {
 	fi
 }
 
-DIR=$(realpath "$1")
-cd $DIR
+DIR=$(pwd)
+
+if [[ -n "$1" ]]; then
+    DIR=$(realpath "$1")
+    cd $DIR
+fi
 
 CURRENT_DIR=${PWD##*/}
 LOG_DIR=/var/log/jasmin-sync
