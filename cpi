@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Alias of composer install
+
+composer install
