@@ -68,7 +68,7 @@ function refresh() {
         while true; do echo -n "."; sleep 1; done &
         trap 'kill $!' SIGTERM SIGKILL
 
-        composer install &> /dev/null
+        composer install --no-interaction &> /dev/null
 
         kill $!
 
