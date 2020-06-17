@@ -44,3 +44,6 @@ do
 		echo "[$(date +"%Y-%m-%d %T")] $REMOTE_DIR$DIR_TO_REMOVE removed." >> $LOG_FILE
 	fi
 done
+
+CURRENT_TIME=$(date +%Y-%m-%d\ %H:%M)
+cat $LOG_FILE | grep "$CURRENT_TIME"
