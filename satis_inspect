@@ -1,0 +1,51 @@
+#!/bin/bash
+
+function read_password {
+  echo "Enter password for private satis:"
+  read -s PASSWORD
+}
+
+function flag {
+  packageCount=${#1}
+
+  echo -n "======"
+  for i in $(seq 1 $packageCount); do
+    echo -n "="
+  done
+  echo -n "======"
+  echo ""
+  echo "===== $1 ====="
+
+  echo -n "======"
+  for i in $(seq 1 $packageCount); do
+    echo -n "="
+  done
+
+  echo -n "======"
+  echo ""
+}
+
+USER="$1"
+PASSWORD=""
+COMPOSER_JSON="$2"
+
+if [[ ! -r "$COMPOSER_JSON" ]]; then
+  echo "$COMPOSER_JSON is not a file"
+  exit 1
+fi
+
+read_password
+
+while read package_line ; do
+  package=$(echo $package_line | cut -d \" -f 2)
+  package_version_requirement=$(echo $package_line | cut -d \" -f 4)
+
+  flag $package
+
+  curl --user "$USER":"$PASSWORD" "https://satis-private.doclerholding.com/#$package" 2> /dev/null | grep "<a href=\"https://satis-private.doclerholding.com/dist/$package" -A0 -B0 | cut -d \> -f 2 | cut -d \< -f 1 | awk 'NR<=5{print $1}'
+
+  echo ""
+  echo "Current version requirement: $package_version_requirement"
+  echo ""
+  echo ""
+done < <(cat "$COMPOSER_JSON" | jq -r .require | grep "dh-")
