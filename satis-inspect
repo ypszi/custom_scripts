@@ -1,5 +1,15 @@
 #!/bin/bash
 
+function show_help() {
+    cat << EOF 
+Usage: satis-inspect [OPTION...]
+
+  -u    username of private satis
+  -c    path of composer.json to parse
+  -?    Prints this help
+EOF
+}
+
 function read_password {
   echo "Enter password for private satis:"
   read -s PASSWORD
@@ -25,9 +35,24 @@ function flag {
   echo ""
 }
 
-USER="$1"
+USER=""
 PASSWORD=""
-COMPOSER_JSON="$2"
+COMPOSER_JSON=""
+
+while getopts "u:c:h?" opt; do
+    case "$opt" in
+    u)  USER=$OPTARG
+        ;;
+    c)  COMPOSER_JSON=$(realpath $OPTARG)
+        ;;
+    h|\?)
+        show_help
+        exit 0
+        ;;
+    esac
+done
+shift $((OPTIND -1))
+
 
 if [[ ! -r "$COMPOSER_JSON" ]]; then
   echo "$COMPOSER_JSON is not a file"
