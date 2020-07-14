@@ -53,6 +53,10 @@ while getopts "u:c:h?" opt; do
 done
 shift $((OPTIND -1))
 
+if [[ -z "$USER" ]]; then
+  echo "User is required."
+  exit 1
+fi
 
 if [[ ! -r "$COMPOSER_JSON" ]]; then
   echo "$COMPOSER_JSON is not a file"
