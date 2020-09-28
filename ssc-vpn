@@ -1,0 +1,21 @@
+#!/bin/bash
+
+DEVICE=$(ip a | grep "sscvpn" -m 1 | awk '{print $2}' | cut -d ":" -f 1);
+
+if [[ -n $DEVICE ]]; then
+	read -p "$DEVICE already exists. Do you want to reconnect? (y/n)" -n 1 -r confirm
+
+	confirm=${confirm:-y}
+
+	echo ""
+
+	if [[ $confirm =~ ^[Yy]$ ]]; then
+	    ip link delete $DEVICE
+	    echo "device removed: $DEVICE"
+		echo "reconnecting..."
+	else
+		exit 0
+	fi
+fi
+
+openvpn --daemon --config /etc/openvpn/client/ssc/client-sscvpn.conf
