@@ -19,3 +19,17 @@ if [[ -n $DEVICE ]]; then
 fi
 
 openvpn --daemon --config /etc/openvpn/client/ssc/client-sscvpn.conf
+
+COUNTER=0
+while [[ -z $DEVICE || $COUNTER -le 5 ]];
+do
+	DEVICE=$(ip a | grep "sscvpn" -m 1 | awk '{print $2}' | cut -d ":" -f 1)
+	(( COUNTER++ ))
+	sleep 1
+done
+
+if [[ -n $DEVICE ]]; then
+	echo "Connected to $DEVICE"
+else
+	echo "Unable to connect"
+fi
