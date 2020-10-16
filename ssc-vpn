@@ -23,6 +23,7 @@ openvpn --daemon --config /etc/openvpn/client/ssc/client-sscvpn.conf
 COUNTER=0
 while [[ -z $DEVICE || $COUNTER -le 5 ]];
 do
+	echo -n "."
 	DEVICE=$(ip a | grep "sscvpn" -m 1 | awk '{print $2}' | cut -d ":" -f 1)
 	(( COUNTER++ ))
 	sleep 1
