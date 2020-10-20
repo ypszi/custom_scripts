@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [[ -z "$1" ]]; then
+	echo "Please specify network to remove: "
+	docker network ls
+	exit 1
+fi
+
+NETWORK="$1"
+docker network rm $(docker network ls | grep "$NETWORK" | awk '{print $1}')
