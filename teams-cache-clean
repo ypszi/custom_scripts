@@ -1,0 +1,10 @@
+#!/bin/bash
+
+rm -rf /home/peterpecosz/.config/Microsoft/Microsoft\ Teams/Cache/
+rm -rf /home/peterpecosz/.config/Microsoft/Microsoft\ Teams/Application\ Cache/Cache/
+rm -rf /home/peterpecosz/.config/Microsoft/Microsoft\ Teams/GPUCache/
+rm -rf /home/peterpecosz/.config/Microsoft/Microsoft\ Teams/IndexedDB/
+rm -rf /home/peterpecosz/.config/Microsoft/Microsoft\ Teams/Local\ Storage/
+rm -rf /home/peterpecosz/.config/Microsoft/Microsoft\ Teams/tmp/
+rm -rf /home/peterpecosz/.config/Microsoft/Microsoft\ Teams/databases/
+rm -rf /home/peterpecosz/.config/Microsoft/Microsoft\ Teams/blob_storage/
