@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Alias of composer require
+
+composer require "$@" --no-interaction --ignore-platform-reqs
