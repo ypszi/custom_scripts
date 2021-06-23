@@ -1,7 +1,11 @@
 #!/bin/bash
 
-if [[ -z "$1" ]]; then
-	echo "Branch parameter is required. Add branch name as argument or -a to remove all merged branches."
+if [[ -z "$1" || "$1" == "-h" ]]; then
+	echo "Branch parameter is required."
+	echo "Add" 
+	echo "# local branch name as argument"
+	echo "# -a to remove all merged branches"
+	echo "# -l to remove local branches from origin"
 	exit 1
 fi
 
@@ -18,6 +22,24 @@ if [[ "$1" == "-a" ]]; then
 
 	confirm=${confirm:-y}
 
+	if [[ $confirm == "y" || $confirm == "yes" ]]; then
+		for branch in $branches; do
+			git push origin --delete "$branch"
+			git branch -D "$branch"
+		done
+	fi
+elif [[ "$1" == "-l" ]]; then
+	branches=$(git b | grep -E "feature/|bugfix/")
+
+	echo -n "The following branches will be deleted from ORIGIN:"
+	echo ""
+	echo "$branches"
+	echo ""
+	echo "To confirm insert (y/n):"
+	echo ""
+	read confirm
+
+	confirm=${confirm:-y}
 	if [[ $confirm == "y" || $confirm == "yes" ]]; then
 		for branch in $branches; do
 			git push origin --delete "$branch"
