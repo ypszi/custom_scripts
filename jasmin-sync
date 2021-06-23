@@ -59,6 +59,7 @@ while inotifywait -r -o "$LOG_FILE" --format "[$(date +"%Y-%m-%d %T")] %w %e %f"
 
 	for REMOTE_DIR in ${REMOTE_PATHS[@]}
 	do
+		echo "Sync started to $REMOTE_DIR"
 		rsync -rae ssh "$DIR"/* dhdevel:"$REMOTE_DIR"
 	done
 done
