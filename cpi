@@ -2,4 +2,4 @@
 
 # Alias of composer install
 
-composer install --no-interaction --ignore-platform-reqs
+composer install --ignore-platform-reqs

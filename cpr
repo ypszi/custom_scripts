@@ -2,4 +2,4 @@
 
 # Alias of composer require
 
-composer require "$@" --no-interaction --ignore-platform-reqs
+composer require "$@" --ignore-platform-reqs
