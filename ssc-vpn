@@ -10,7 +10,7 @@ if [[ -n $DEVICE ]]; then
 	echo ""
 
 	if [[ $confirm =~ ^[Yy]$ ]]; then
-	    ip link delete $DEVICE
+	    ip link set $DEVICE down
 	    echo "device removed: $DEVICE"
 		echo "reconnecting..."
 	else
