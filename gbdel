@@ -9,8 +9,8 @@ if [[ -z "$1" || "$1" == "-h" ]]; then
 	exit 1
 fi
 
-if [[ "$1" == "-a" ]]; then
-	branches=$(git b -a --merged | grep -E "origin/feature|origin/bugfix" | cut -d '/' -f 3-)
+if [[ "$1" == "-m" ]]; then
+	branches=$(git b -a --merged | grep -E "origin/feature|origin/bugfix|origin/release" | cut -d '/' -f 3-)
 
 	echo -n "The following branches will be deleted from ORIGIN:"
 	echo ""
@@ -29,9 +29,26 @@ if [[ "$1" == "-a" ]]; then
 		done
 	fi
 elif [[ "$1" == "-l" ]]; then
-	branches=$(git b | grep -E "feature/|bugfix/")
+	branches=$(git b | grep -v -e 'master' -e '*')
 
-	echo -n "The following branches will be deleted from ORIGIN:"
+	echo -n "The following branches will be deleted locally:"
+	echo ""
+	echo "$branches"
+	echo ""
+	echo "To confirm insert (y/n):"
+	echo ""
+	read confirm
+
+	confirm=${confirm:-y}
+	if [[ $confirm == "y" || $confirm == "yes" ]]; then
+		for branch in $branches; do
+			git b -D "$branch"
+		done
+	fi
+elif [[ "$1" == "-r" ]]; then
+	branches=$(git b | grep -v -e 'master' -e '*')
+
+	echo -n "The following branches will be deleted:"
 	echo ""
 	echo "$branches"
 	echo ""
