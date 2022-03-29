@@ -1,0 +1,84 @@
+#!/bin/bash
+
+function show_help() {
+    cat << EOF 
+Usage: vpn [OPTION...]
+
+VPN operations
+
+  -a   	List active VPN connections
+  -c	To connect to VPN. Argument can be [ssc], [lux]
+  -h	Prints this help
+  -? 	Prints this help
+EOF
+}
+
+function list() {
+	ip a | grep vpn
+}
+
+function vpn_connect() {
+	VPN="$1"
+
+	if [[ $VPN != "ssc" && $VPN != "lux" ]]; then
+		echo "VPN is not supported: $VPN"
+		echo ""
+		exit 1
+	fi
+
+	VPN_DEVICE="$VPN"vpn
+	DEVICE="$(ip a | grep "$VPN_DEVICE" -m 1 | awk '{print $2}' | cut -d ":" -f 1)";
+
+	if [[ -n $DEVICE ]]; then
+		read -p "$DEVICE already exists. Do you want to reconnect? (y/n) " -n 1 -r confirm
+
+		confirm=${confirm:-y}
+
+		if [[ $confirm =~ ^[Yy]$ ]]; then
+		    ip link set $DEVICE down
+		    echo "device removed: $DEVICE"
+			echo "reconnecting..."
+		else
+			exit 0
+		fi
+	fi
+
+	if [[ -r "/etc/openvpn/client/$VPN/client-$VPN_DEVICE.conf" ]]; then
+		openvpn --daemon --config "/etc/openvpn/client/$VPN/client-$VPN_DEVICE.conf"
+
+		COUNTER=0
+		while [[ -z $DEVICE || $COUNTER -le 5 ]];
+		do
+			echo -n "."
+			DEVICE=$(ip a | grep "$VPN_DEVICE" -m 1 | awk '{print $2}' | cut -d ":" -f 1)
+			(( COUNTER++ ))
+			sleep 1
+		done
+
+		if [[ -n $DEVICE ]]; then
+			echo "Connected to $DEVICE"
+		else
+			echo "Unable to connect"
+		fi
+	else
+		echo "File is not readable: /etc/openvpn/client/$VPN/client-$VPN_DEVICE.conf"
+		echo ""
+		exit 1
+	fi
+}
+
+while getopts "ac:h?" opt; do
+    case "$opt" in
+	a) list
+        ;;
+    c)  vpn_connect $OPTARG
+        ;;
+    h|\?)
+        show_help
+        exit 0
+        ;;
+    esac
+done
+shift $((OPTIND -1))
+
+exit 0
