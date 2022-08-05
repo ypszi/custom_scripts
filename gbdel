@@ -4,8 +4,9 @@ if [[ -z "$1" || "$1" == "-h" ]]; then
 	echo "Branch parameter is required."
 	echo "Add" 
 	echo "# local branch name as argument"
-	echo "# -a to remove all merged branches"
+	echo "# -m to remove all merged branches"
 	echo "# -l to remove local branches from origin"
+	echo "# -r to remove remote branches from origin"
 	exit 1
 fi
 
