@@ -8,6 +8,9 @@ function get_remote_branch() {
 	if [[ $CURRENT_DIR == "msc-portal" ]]; then
 		REMOTE_BRANCH="master"
 	fi
+	if [[ $CURRENT_DIR == "msc-site" ]]; then
+		REMOTE_BRANCH="master"
+	fi
 }
 
 function create_remote_paths() {
@@ -64,6 +67,10 @@ while inotifywait -r -o "$LOG_FILE" --format "[$(date +"%Y-%m-%d %T")] %w %e %f"
 	for REMOTE_DIR in ${REMOTE_PATHS[@]}
 	do
 		echo "Sync started to $REMOTE_DIR"
-		rsync -rae ssh "$DIR"/* dhdevel:"$REMOTE_DIR"
+		if [[ -f "$DIR/.rsync_exclude" ]]; then
+			rsync -rae ssh "$DIR"/* dhdevel:"$REMOTE_DIR" --exclude-from="$DIR/.rsync_exclude"
+		else
+			rsync -rae ssh "$DIR"/* dhdevel:"$REMOTE_DIR" 
+		fi
 	done
 done
