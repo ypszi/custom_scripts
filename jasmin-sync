@@ -5,12 +5,7 @@ function get_remote_branch() {
 	BRANCH=${GIT_BRANCH:2}
 	REMOTE_BRANCH=$(echo "$BRANCH" | sed 's/\//\-/g' | cut -f 1-3 -d "-" | tr '[:upper:]' '[:lower:]')
 
-	if [[ $CURRENT_DIR == "msc-portal" ]]; then
-		REMOTE_BRANCH="master"
-	fi
-	if [[ $CURRENT_DIR == "msc-site" ]]; then
-		REMOTE_BRANCH="master"
-	fi
+	REMOTE_BRANCH="master"
 }
 
 function create_remote_paths() {
@@ -45,6 +40,7 @@ fi
 REMOTE_BRANCH=""
 
 get_remote_branch
+echo "Remote branch used: $REMOTE_BRANCH"
 
 REMOTE_PATHS=()
 
