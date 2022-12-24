@@ -11,6 +11,8 @@ if [[ -n $DEVICE ]]; then
 
 	if [[ $confirm =~ ^[Yy]$ ]]; then
 	    ip link set $DEVICE down
+	    ip link delete $DEVICE
+	    pgrep -f client-luxvpn.conf | xargs kill $1
 	    echo "device removed: $DEVICE"
 		echo "reconnecting..."
 	else
@@ -21,16 +23,18 @@ fi
 openvpn --daemon --config /etc/openvpn/client/lux/client-luxvpn.conf
 
 COUNTER=0
-while [[ -z $DEVICE || $COUNTER -le 5 ]];
+while [[ -z $DEVICE && $COUNTER -lt 5 ]];
 do
 	echo -n "."
 	DEVICE=$(ip a | grep "luxvpn" -m 1 | awk '{print $2}' | cut -d ":" -f 1)
 	(( COUNTER++ ))
 	sleep 1
 done
+echo ""
 
 if [[ -n $DEVICE ]]; then
 	echo "Connected to $DEVICE"
 else
 	echo "Unable to connect"
+    pgrep -f client-luxvpn.conf | xargs kill $1
 fi
