@@ -15,11 +15,12 @@ CURRENT_BRANCH=$(git b | grep "*" | cut -d "/" -f 2)
 
 echo "Current branch: ${CURRENT_BRANCH}"
 echo ""
-read -p "Merged branch? (master) " MERGED_BRANCH
-MERGED_BRANCH=${MERGED_BRANCH:-master}
 CONFIRM=${CONFIRM:-n}
 
 if [[ "$1" == "-m" ]]; then
+  read -p "Merged branch? (master) " MERGED_BRANCH
+  MERGED_BRANCH=${MERGED_BRANCH:-master}
+
 	branches=$(git b -a --merged ${MERGED_BRANCH} | grep -v -e 'master' -e '*' -e "${CURRENT_BRANCH}" | grep -E "origin/feature|origin/bugfix|origin/release" | cut -d '/' -f 3-)
 
 	echo -n "The following branches will be deleted from ORIGIN:"
