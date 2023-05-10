@@ -2,7 +2,7 @@
 
 if [[ -z "$1" || "$1" == "-h" ]]; then
 	echo "Branch parameter is required."
-	echo "Add" 
+	echo "Add"
 	echo "# local branch name as argument"
 	echo "# -m to remove all merged branches"
 	echo "# -l to remove local branches from origin"
@@ -10,55 +10,61 @@ if [[ -z "$1" || "$1" == "-h" ]]; then
 	exit 1
 fi
 
+git fetch --all --prune
+CURRENT_BRANCH=$(git b | grep "*" | cut -d "/" -f 2)
+
+echo "Current branch: ${CURRENT_BRANCH}"
+echo ""
+read -p "Merged branch? (master) " MERGED_BRANCH
+MERGED_BRANCH=${MERGED_BRANCH:-master}
+CONFIRM=${CONFIRM:-n}
+
 if [[ "$1" == "-m" ]]; then
-	branches=$(git b -a --merged | grep -E "origin/feature|origin/bugfix|origin/release" | cut -d '/' -f 3-)
+	branches=$(git b -a --merged ${MERGED_BRANCH} | grep -v -e 'master' -e '*' -e "${CURRENT_BRANCH}" | grep -E "origin/feature|origin/bugfix|origin/release" | cut -d '/' -f 3-)
 
 	echo -n "The following branches will be deleted from ORIGIN:"
 	echo ""
 	echo "$branches"
 	echo ""
-	echo "To confirm insert (y/n):"
+	read -p "To confirm insert (y/n): " CONFIRM
 	echo ""
-	read confirm
 
-	confirm=${confirm:-y}
+	CONFIRM=${CONFIRM:-n}
 
-	if [[ $confirm == "y" || $confirm == "yes" ]]; then
+	if [[ $CONFIRM == "y" || $CONFIRM == "yes" ]]; then
 		for branch in $branches; do
 			git push origin --delete "$branch"
 			git branch -D "$branch"
 		done
 	fi
 elif [[ "$1" == "-l" ]]; then
-	branches=$(git b | grep -v -e 'master' -e '*')
+	branches=$(git b | grep -v -e 'master' -e '*' -e "${CURRENT_BRANCH}")
 
 	echo -n "The following branches will be deleted locally:"
 	echo ""
 	echo "$branches"
 	echo ""
-	echo "To confirm insert (y/n):"
+	read -p "To confirm insert (y/n): " CONFIRM
 	echo ""
-	read confirm
 
-	confirm=${confirm:-y}
-	if [[ $confirm == "y" || $confirm == "yes" ]]; then
+	CONFIRM=${CONFIRM:-n}
+	if [[ $CONFIRM == "y" || $CONFIRM == "yes" ]]; then
 		for branch in $branches; do
 			git b -D "$branch"
 		done
 	fi
 elif [[ "$1" == "-r" ]]; then
-	branches=$(git b | grep -v -e 'master' -e '*')
+	branches=$(git b | grep -v -e 'master' -e '*' -e "${CURRENT_BRANCH}")
 
 	echo -n "The following branches will be deleted:"
 	echo ""
 	echo "$branches"
 	echo ""
-	echo "To confirm insert (y/n):"
+	read -p "To confirm insert (y/n): " CONFIRM
 	echo ""
-	read confirm
 
-	confirm=${confirm:-y}
-	if [[ $confirm == "y" || $confirm == "yes" ]]; then
+	CONFIRM=${CONFIRM:-n}
+	if [[ $CONFIRM == "y" || $CONFIRM == "yes" ]]; then
 		for branch in $branches; do
 			git push origin --delete "$branch"
 			git branch -D "$branch"
