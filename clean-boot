@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# boot dir size in bytes: 463832
+BOOT_SIZE=$(du -s /boot/ | cut -d "/" -f 1 | xargs)
+# max dir size for boot dir
+MAX_DIR_SIZE=450000
+
+if [[ $BOOT_SIZE -lt $MAX_DIR_SIZE ]]; then
+  echo "size of /boot/ is less than $MAX_DIR_SIZE"
+  exit
+else
+  echo "size of /boot/ is $BOOT_SIZE out of $MAX_DIR_SIZE"
+  echo ""
+  read -p "To proceed insert (y/n): " CONFIRM
+  CONFIRM=${CONFIRM:-y}
+  echo ""
+  if [[ $CONFIRM =~ ^[Yy]$ ]]; then
+    echo "Cleaning up /boot/"
+  else
+    exit
+  fi
+fi
+
+FILES=$(ls /boot/ | grep "\-generic")
+OLDEST=$(ls /boot/ | grep "\-generic" | head -1)
+OLDEST_VERSION=$(ls /boot/ | grep "\-generic" | head -1 | cut -d "-" -f 2-3)
+OLDEST_VERSION_SUFFIX=$(echo $OLDEST_VERSION | tr -d '.-')
+
+for FILE in $FILES
+do
+  VERSION=$(echo $FILE | cut -d "-" -f 2-3)
+  VERSION_SUFFIX=$(echo $VERSION | tr -d '.-')
+
+  if [[ $VERSION_SUFFIX -lt $OLDEST_VERSION_SUFFIX ]]; then
+    OLDEST=$FILE
+    $OLDEST_VERSION=$VERSION_SUFFIX
+    $OLDEST_VERSION_SUFFIX=$VERSION_SUFFIX
+  fi
+done
+
+LIST_OF_FILES_TO_CLEAN=$(ls /boot/ | grep $OLDEST_VERSION)
+echo ""
+echo "list of files to remove:"
+echo ""
+for FILE in $LIST_OF_FILES_TO_CLEAN
+do
+  echo "/boot/$FILE"
+done
+
+echo ""
+read -p "To confirm insert (y/n): " CONFIRM
+CONFIRM=${CONFIRM:-y}
+echo ""
+
+if [[ $CONFIRM =~ ^[Yy]$ ]]; then
+  for FILE in $LIST_OF_FILES_TO_CLEAN
+  do
+    rm /boot/$FILE
+  done
+fi
+
+echo "new size of /boot/ is $BOOT_SIZE out of $MAX_DIR_SIZE"
