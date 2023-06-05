@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PHP_VERSION_DESIRE=${1:-8.2}
+PHP_VERSION_DESIRE=${1:-8.1}
 FILE="/usr/bin/php$PHP_VERSION_DESIRE"
 ALT_FILE=/etc/alternatives/php
 
