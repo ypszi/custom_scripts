@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "setting up ssh agent"
+ssh-add
+
+echo "setting up ssc vpn"
+sudo ssc-vpn
+echo "setting up lux vpn"
+sudo lux-vpn
