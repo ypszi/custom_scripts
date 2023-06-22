@@ -1,0 +1,18 @@
+#!/bin/bash
+
+read -p "Do you want to skip setting up ssh agent? (y/n) " -n 1 -r SKIP_SSH_AGENT
+echo ""
+
+SKIP_SSH_AGENT=${SKIP_SSH_AGENT:-y}
+
+if [[ $SKIP_SSH_AGENT =~ ^[Yy]$ ]]; then
+  echo "ssh agent setup skipped"
+else
+  echo "setting up ssh agent"
+  ssh-add
+fi
+
+echo "setting up ssc vpn"
+sudo ssc-vpn
+echo "setting up lux vpn"
+sudo lux-vpn
