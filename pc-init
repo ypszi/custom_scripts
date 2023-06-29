@@ -16,3 +16,5 @@ echo "setting up ssc vpn"
 sudo ssc-vpn
 echo "setting up lux vpn"
 sudo lux-vpn
+
+google-chrome --new-window https://webmail.doclerholding.com/owa/ https://dds.int.livejasmin.com/ &> /dev/null
