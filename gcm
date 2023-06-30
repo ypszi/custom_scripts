@@ -1,6 +1,12 @@
 #!/bin/bash
 
-CURRENT_BRANCH=$(git b | grep "*" | cut -d "/" -f 2 | cut -d "-" -f 1,2)
-TIME_LOG=${2:-"0m"}
+CURRENT_TICKET=$(git b | grep "*" | cut -d "/" -f 2 | cut -d "-" -f 1,2)
+TIME_LOG=${2:-""}
 
-git commit -m "$CURRENT_BRANCH $1 #time $TIME_LOG" ${@:3}
+COMMIT_MSG="$1 $CURRENT_TICKET"
+
+if [[ -n $TIME_LOG ]]; then
+  COMMIT_MSG="$COMMIT_MSG #time $TIME_LOG"
+fi
+
+git commit -m "$COMMIT_MSG" ${@:3}
