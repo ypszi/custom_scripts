@@ -22,23 +22,39 @@ else
 fi
 
 FILES=$(ls /boot/ | grep "\-generic")
-OLDEST=$(ls /boot/ | grep "\-generic" | head -1)
-OLDEST_VERSION=$(ls /boot/ | grep "\-generic" | head -1 | cut -d "-" -f 2-3)
-OLDEST_VERSION_SUFFIX=$(echo $OLDEST_VERSION | tr -d '.-')
+OLDEST_MAJOR_VERSION=$(echo "$OLDEST_VERSION" | cut -d "." -f 1)
+OLDEST_MINOR_VERSION=$(echo "$OLDEST_VERSION" | cut -d "." -f 2)
+OLDEST_PATCH_VERSION=$(echo "$OLDEST_VERSION" | cut -d "." -f 3 | cut -d "-" -f 1)
+OLDEST_SUFFIX_VERSION=$(echo "$OLDEST_VERSION" | cut -d "-" -f 2)
 
 for FILE in $FILES
 do
   VERSION=$(echo $FILE | cut -d "-" -f 2-3)
   VERSION_SUFFIX=$(echo $VERSION | tr -d '.-')
+  MAJOR_VERSION=$(echo "$VERSION" | cut -d "." -f 1)
+  MINOR_VERSION=$(echo "$VERSION" | cut -d "." -f 2)
+  PATCH_VERSION=$(echo "$VERSION" | cut -d "." -f 3 | cut -d "-" -f 1)
+  SUFFIX_VERSION=$(echo "$VERSION" | cut -d "-" -f 2)
 
-  if [[ $VERSION_SUFFIX -lt $OLDEST_VERSION_SUFFIX ]]; then
-    OLDEST=$FILE
-    $OLDEST_VERSION=$VERSION_SUFFIX
-    $OLDEST_VERSION_SUFFIX=$VERSION_SUFFIX
+  if [[ $MAJOR_VERSION -lt $OLDEST_MAJOR_VERSION ]]; then
+    OLDEST_MAJOR_VERSION="$MAJOR_VERSION"
+
+    if [[ $MINOR_VERSION -lt $OLDEST_MINOR_VERSION ]]; then
+      OLDEST_MINOR_VERSION="$MINOR_VERSION"
+
+      if [[ $PATCH_VERSION -lt $OLDEST_PATCH_VERSION ]]; then
+        OLDEST_PATCH_VERSION="$PATCH_VERSION"
+
+        if [[ $SUFFIX_VERSION -lt $OLDEST_SUFFIX_VERSION ]]; then
+          OLDEST_SUFFIX_VERSION="$SUFFIX_VERSION"
+        fi
+      fi
+    fi
   fi
 done
 
-LIST_OF_FILES_TO_CLEAN=$(ls /boot/ | grep $OLDEST_VERSION)
+OLDEST_VERSION="$OLDEST_MAJOR_VERSION.$OLDEST_MINOR_VERSION.$OLDEST_PATCH_VERSION-$OLDEST_SUFFIX_VERSION"
+LIST_OF_FILES_TO_CLEAN=$(ls /boot/ | grep "$OLDEST_VERSION")
 echo ""
 echo "list of files to remove:"
 echo ""
@@ -58,5 +74,7 @@ if [[ $CONFIRM =~ ^[Yy]$ ]]; then
     rm /boot/$FILE
   done
 fi
+
+BOOT_SIZE=$(du -s /boot/ | cut -d "/" -f 1 | xargs)
 
 echo "new size of /boot/ is $BOOT_SIZE out of $MAX_DIR_SIZE"
