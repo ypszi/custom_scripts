@@ -5,23 +5,22 @@ BOOT_SIZE=$(du -s /boot/ | cut -d "/" -f 1 | xargs)
 # max dir size for boot dir
 MAX_DIR_SIZE=450000
 
+FILES=$(ls /boot/ | grep "\-generic")
+
+echo "list of files:"
+echo "$FILES"
+echo ""
+
 if [[ $BOOT_SIZE -lt $MAX_DIR_SIZE ]]; then
   echo "size of /boot/ is less than $MAX_DIR_SIZE"
   exit
-else
-  echo "size of /boot/ is $BOOT_SIZE out of $MAX_DIR_SIZE"
-  echo ""
-  read -p "To proceed insert (y/n): " CONFIRM
-  CONFIRM=${CONFIRM:-y}
-  echo ""
-  if [[ $CONFIRM =~ ^[Yy]$ ]]; then
-    echo "Cleaning up /boot/"
-  else
-    exit
-  fi
 fi
 
-FILES=$(ls /boot/ | grep "\-generic")
+echo "size of /boot/ is $BOOT_SIZE out of $MAX_DIR_SIZE"
+echo ""
+
+OLDEST_VERSION=$(ls /boot/ | grep "\-generic" | sort | head -1 | cut -d "-" -f 2-3)
+
 OLDEST_MAJOR_VERSION=$(echo "$OLDEST_VERSION" | cut -d "." -f 1)
 OLDEST_MINOR_VERSION=$(echo "$OLDEST_VERSION" | cut -d "." -f 2)
 OLDEST_PATCH_VERSION=$(echo "$OLDEST_VERSION" | cut -d "." -f 3 | cut -d "-" -f 1)
@@ -64,8 +63,8 @@ do
 done
 
 echo ""
-read -p "To confirm insert (y/n): " CONFIRM
-CONFIRM=${CONFIRM:-y}
+read -n 1 -p "To confirm insert (y/N): " CONFIRM
+CONFIRM=${CONFIRM:-n}
 echo ""
 
 if [[ $CONFIRM =~ ^[Yy]$ ]]; then
@@ -78,3 +77,9 @@ fi
 BOOT_SIZE=$(du -s /boot/ | cut -d "/" -f 1 | xargs)
 
 echo "new size of /boot/ is $BOOT_SIZE out of $MAX_DIR_SIZE"
+
+FILES=$(ls /boot/ | grep "\-generic")
+
+echo "list of files:"
+echo "$FILES"
+echo ""
