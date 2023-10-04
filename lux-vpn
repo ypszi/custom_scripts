@@ -20,7 +20,7 @@ if [[ -n $DEVICE ]]; then
 	fi
 fi
 
-openvpn --daemon --config /etc/openvpn/client/lux/client-luxvpn.conf
+sudo openvpn --daemon --config /home/peter.pecosz/openvpn/client/lux/client-luxvpn.conf
 
 COUNTER=0
 while [[ -z $DEVICE && $COUNTER -lt 5 ]];
