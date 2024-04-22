@@ -27,7 +27,7 @@ if [[ "$1" == "-m" ]]; then
 	echo ""
 	echo "$branches"
 	echo ""
-	read -p "To confirm insert (y/n): " CONFIRM
+	read -p "To confirm insert [y/N]: " CONFIRM
 	echo ""
 
 	CONFIRM=${CONFIRM:-n}
@@ -45,7 +45,7 @@ elif [[ "$1" == "-l" ]]; then
 	echo ""
 	echo "$branches"
 	echo ""
-	read -p "To confirm insert (y/n): " CONFIRM
+	read -p "To confirm insert [y/N]: " CONFIRM
 	echo ""
 
 	CONFIRM=${CONFIRM:-n}
@@ -61,7 +61,7 @@ elif [[ "$1" == "-r" ]]; then
 	echo ""
 	echo "$branches"
 	echo ""
-	read -p "To confirm insert (y/n): " CONFIRM
+	read -p "To confirm insert [y/N]: " CONFIRM
 	echo ""
 
 	CONFIRM=${CONFIRM:-n}
