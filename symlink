@@ -1,0 +1,14 @@
+#!/bin/sh
+
+if [[ -z "$1" || "$1" == "-h" ]]; then
+	echo "Helps to create symlinks of custom scripts to be executable."
+	echo "Filename parameter is required."
+	exit 1
+fi
+
+FILENAME=$(basename $1)
+FILEPATH=$(echo "~/projects/peter.pecosz/custom_scripts/$FILENAME")
+EXECUTABLE=${FILENAME%%.*}
+
+chmod +x $FILEPATH
+ln -s $FILEPATH /usr/local/bin/$EXECUTABLE
