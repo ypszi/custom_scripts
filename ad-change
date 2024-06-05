@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [[ "$1" == "-h" ]]; then
+	echo "Helps to follow up on AD password change."
+	exit 1
+fi
+
+subl ~/.composer/auth.json && \
+docker login devops-docker.nexus.doclerholding.com && \
+docker login dba-docker.nexus.doclerholding.com
