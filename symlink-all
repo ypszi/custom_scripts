@@ -1,0 +1,58 @@
+#!/bin/bash
+
+echo "Creating symlink for symlink"
+symlink symlink
+
+echo "Creating symlink for ad-change"
+symlink ad-change
+
+echo "Creating symlink for cpi"
+symlink cpi
+
+echo "Creating symlink for cpr"
+symlink cpr
+
+echo "Creating symlink for dfps"
+symlink dfps
+
+echo "Creating symlink for gadda"
+symlink gadda
+
+echo "Creating symlink for gbdel"
+symlink gbdel
+
+echo "Creating symlink for gcm"
+symlink gcm
+
+echo "Creating symlink for gd"
+symlink gd
+
+echo "Creating symlink for gds"
+symlink gds
+
+echo "Creating symlink for gf"
+symlink gf
+
+echo "Creating symlink for glog"
+symlink glog
+
+echo "Creating symlink for gmerge"
+symlink gmerge
+
+echo "Creating symlink for grs"
+symlink grs
+
+echo "Creating symlink for gsgo"
+symlink gsgo
+
+echo "Creating symlink for gspull"
+symlink gspull
+
+echo "Creating symlink for gtagl"
+symlink gtagl
+
+echo "Creating symlink for jasmin-sync"
+symlink jasmin-sync
+
+echo "Creating symlink for subl"
+symlink /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl

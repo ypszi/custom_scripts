@@ -6,9 +6,21 @@ if [[ -z "$1" || "$1" == "-h" ]]; then
 	exit 1
 fi
 
-FILENAME=$(basename $1)
-FILEPATH=$(echo "~/projects/peter.pecosz/custom_scripts/$FILENAME")
-EXECUTABLE=${FILENAME%%.*}
+if [[ ! -e "$1" ]]; then
+  echo "$1 does not exist, failed to create symlink"
+  exit 1
+fi
 
-chmod +x $FILEPATH
-ln -s $FILEPATH /usr/local/bin/$EXECUTABLE
+FILENAME=$(basename "$1")
+EXECUTABLE=${FILENAME%%.*}
+FILEPATH=$(realpath "$1")
+BIN_PATH="/usr/local/bin/$EXECUTABLE"
+
+chmod +x "$FILEPATH"
+
+if [[ -e "$BIN_PATH" ]]; then
+  echo "$BIN_PATH already exists, skipped to create symlink"
+else
+  ln -s "$FILEPATH" "$BIN_PATH"
+fi
+

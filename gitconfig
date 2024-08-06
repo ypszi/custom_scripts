@@ -1,0 +1,12 @@
+#!/bin/bash
+
+git config --global user.name "Peter Pecosz"
+git config --global user.email peter.pecosz@byborgenterprises.com
+git config --global alias.c commit
+git config --global alias.go checkout
+git config --global alias.b branch
+git config --global alias.st status
+git config --global alias.pul pull
+git config --global core.excludesfile /Users/peter.pecosz/projects/.gitignore_global
+
+cp ./gitignore_global ~/projects/.gitignore_global
