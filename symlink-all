@@ -3,9 +3,6 @@
 echo "Creating symlink for symlink"
 symlink symlink
 
-echo "Creating symlink for ad-change"
-symlink ad-change
-
 echo "Creating symlink for cpi"
 symlink cpi
 
@@ -50,9 +47,6 @@ symlink gspull
 
 echo "Creating symlink for gtagl"
 symlink gtagl
-
-echo "Creating symlink for jasmin-sync"
-symlink jasmin-sync
 
 echo "Creating symlink for subl"
 symlink /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl

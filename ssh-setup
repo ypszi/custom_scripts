@@ -5,8 +5,13 @@ if [[ ! -f $HOME/.ssh/config ]]; then
   touch $HOME/.ssh/config
 fi
 
-echo "Host dhdevel
-    HostName 10.128.130.18
+read -p "SSH Host short name: " HOST
+read -p "SSH Host IP: " IP
+
+echo "Host $HOST
+    HostName $IP
     Port 22
-    User peter.pecosz" > $HOME/.ssh/config
-echo "'dhdevel' has been added to ssh config as a Host"
+    User peter.pecosz
+" >> $HOME/.ssh/config
+
+echo "'$HOST' has been added to ssh config as a Host"

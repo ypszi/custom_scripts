@@ -9,6 +9,6 @@ git config --global alias.b branch
 git config --global alias.st status
 git config --global alias.pul pull
 git config --global core.excludesfile /Users/peter.pecosz/projects/.gitignore_global
-git config --global core.editor subl
+git config --global core.editor nano
 
 cp ./gitignore_global ~/projects/.gitignore_global
