@@ -8,9 +8,9 @@ git config --global alias.go checkout
 git config --global alias.b branch
 git config --global alias.st status
 git config --global alias.pul pull
-git config --global alias.f=fetch --prune --all
-git config --global alias.l=log --oneline
-git config --global core.excludesfile /Users/peter.pecosz/projects/.gitignore_global
+git config --global alias.f "fetch --prune --all"
+git config --global alias.l "log --oneline"
+git config --global core.excludesfile /Users/peterpecosz/projects/.gitignore_global
 git config --global core.editor nano
 
-cp ./gitignore_global ~/projects/.gitignore_global
+cp ./.gitignore_global ~/projects/.gitignore_global
