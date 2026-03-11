@@ -10,43 +10,43 @@ echo "Creating symlink for cpr"
 symlink cpr
 
 echo "Creating symlink for dfps"
-symlink dfps
+symlink ./docker/dfps
 
 echo "Creating symlink for gadda"
-symlink gadda
+symlink ./git/gadda
 
 echo "Creating symlink for gbdel"
-symlink gbdel
+symlink ./git/gbdel
 
 echo "Creating symlink for gcm"
-symlink gcm
+symlink ./git/gcm
 
 echo "Creating symlink for gd"
-symlink gd
+symlink ./git/gd
 
 echo "Creating symlink for gds"
-symlink gds
+symlink ./git/gds
 
 echo "Creating symlink for gf"
-symlink gf
+symlink ./git/gf
 
 echo "Creating symlink for glog"
-symlink glog
+symlink ./git/glog
 
 echo "Creating symlink for gmerge"
-symlink gmerge
+symlink ./git/gmerge
 
 echo "Creating symlink for grs"
-symlink grs
+symlink ./git/grs
 
 echo "Creating symlink for gsgo"
-symlink gsgo
+symlink ./git/gsgo
 
 echo "Creating symlink for gspull"
-symlink gspull
+symlink ./git/gspull
 
 echo "Creating symlink for gtagl"
-symlink gtagl
+symlink ./git/gtagl
 
 echo "Creating symlink for subl"
 symlink /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl
