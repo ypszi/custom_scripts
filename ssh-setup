@@ -5,13 +5,6 @@ if [[ ! -f $HOME/.ssh/config ]]; then
   touch $HOME/.ssh/config
 fi
 
-read -p "SSH Host short name: " HOST
-read -p "SSH Host IP: " IP
+cat ./git/ssh_config >> $HOME/.ssh/config
 
-echo "Host $HOST
-    HostName $IP
-    Port 22
-    User peter.pecosz
-" >> $HOME/.ssh/config
-
-echo "'$HOST' has been added to ssh config as a Host"
+echo "ssh config has been updated"

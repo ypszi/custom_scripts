@@ -1,0 +1,7 @@
+Host github.com
+    User peterpecosz-rmt
+    Identityfile ~/.ssh/id_ed25519_rmt
+
+Host github.com
+    User ypszi
+    Identityfile ~/.ssh/id_ed25519_ypszi
