@@ -1,7 +1,15 @@
 #!/bin/bash
 
-git config --global user.name "peterpecosz-rmt"
-git config --global user.email ppecosz@rmt-labs.com
+DEFAULT_USERNAME="peterpecosz-rmt"
+DEFAULT_EMAIL="ppecosz@rmt-labs.com"
+
+read -p "user.name [$DEFAULT_USERNAME]: " USERNAME
+read -p "user.email [$DEFAULT_EMAIL]: " EMAIL
+USERNAME=${USERNAME:-"$DEFAULT_USERNAME"}
+EMAIL=${EMAIL:-"$DEFAULT_EMAIL"}
+
+git config --global user.name "$USERNAME"
+git config --global user.email "$EMAIL"
 git config --global alias.c commit
 git config --global alias.cp cherry-pick
 git config --global alias.go checkout
@@ -10,7 +18,7 @@ git config --global alias.st status
 git config --global alias.pul pull
 git config --global alias.f "fetch --prune --all"
 git config --global alias.l "log --oneline"
-git config --global core.excludesfile /Users/peterpecosz/projects/.gitignore_global
+git config --global core.excludesfile ~/projects/.gitignore_global
 git config --global core.editor nano
 
-cp ./.gitignore_global ~/projects/.gitignore_global
+cp $(dirname "$0")/.gitignore_global ~/projects/.gitignore_global
