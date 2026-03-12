@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ ! -f ~/.zshrc ]]; then
+  echo "touching ~/.zshrc"
+  touch ~/.zshrc
+fi
+
 CONTENT=$(cat ~/.zshrc)
 
 if [[ $CONTENT == *"PS1="* ]]; then
