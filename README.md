@@ -1,7 +1,18 @@
-These scripts are here to help development process. 
+A collection of utility scripts to streamline development setup.
 
 # Usage
 
- 1. Update `app_location.cfg` to the location of your APIs. (It sets a variable called `ROOT_DIR`)
- 2. Learn what each executable does. Some of the executables might be dependency of another.
- 3. Enjoy the simplified development!
+## color-zsh
+Sets a custom profile color in ~/.zshrc.
+
+## ssh-setup
+Generates an SSH host configuration at ~/.ssh/config.
+
+## symlink
+Creates a symlink for a specified command.
+
+## symlink-all
+Creates symlinks for all available commands at once.
+
+## git/gitconf
+Configures global Git settings including user identity, aliases, default editor, and a global gitignore.
