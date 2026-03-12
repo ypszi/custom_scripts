@@ -1,0 +1,12 @@
+#!/bin/bash
+
+CONTENT=$(cat ~/.zshrc)
+
+if [[ $CONTENT == *"PS1="* ]]; then
+  echo "~/.zshrc already contains PS1 var"
+  exit 0;
+fi
+
+echo 'PS1="%F{red}%n%F%E%F{gray}@%F%F{yellow}%M%F %F{gray}%~%F %F{yellow}# %F{gray}"' > ~/.zshrc
+echo "$CONTENT" >> ~/.zshrc
+source ~/.zshrc
