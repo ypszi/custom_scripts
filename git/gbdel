@@ -18,10 +18,10 @@ echo ""
 CONFIRM=${CONFIRM:-n}
 
 if [[ "$1" == "-m" ]]; then
-  read -p "Merged branch? (master) " MERGED_BRANCH
-  MERGED_BRANCH=${MERGED_BRANCH:-master}
+  read -p "Merged branch? (main) " MERGED_BRANCH
+  MERGED_BRANCH=${MERGED_BRANCH:-main}
 
-	branches=$(git b -a --merged ${MERGED_BRANCH} | grep -v -e 'master' -e '*' -e "${CURRENT_BRANCH}" | grep -E "origin/feature|origin/bugfix|origin/release" | cut -d '/' -f 3-)
+	branches=$(git b -a --merged ${MERGED_BRANCH} | grep -v -e 'main' -e '*' -e "${CURRENT_BRANCH}" | grep -E "origin/feature|origin/bugfix|origin/release" | cut -d '/' -f 3-)
 
 	echo -n "The following branches will be deleted from ORIGIN:"
 	echo ""
@@ -39,7 +39,7 @@ if [[ "$1" == "-m" ]]; then
 		done
 	fi
 elif [[ "$1" == "-l" ]]; then
-	branches=$(git b | grep -v -e 'master' -e '*' -e "${CURRENT_BRANCH}")
+	branches=$(git b | grep -v -e 'main' -e '*' -e "${CURRENT_BRANCH}")
 
 	echo -n "The following branches will be deleted locally:"
 	echo ""
@@ -55,7 +55,7 @@ elif [[ "$1" == "-l" ]]; then
 		done
 	fi
 elif [[ "$1" == "-r" ]]; then
-	branches=$(git b | grep -v -e 'master' -e '*' -e "${CURRENT_BRANCH}")
+	branches=$(git b | grep -v -e 'main' -e '*' -e "${CURRENT_BRANCH}")
 
 	echo -n "The following branches will be deleted:"
 	echo ""

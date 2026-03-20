@@ -2,6 +2,6 @@
 
 git fetch --all --prune
 
-MERGED_BRANCH=${1:-master}
+MERGED_BRANCH=${1:-main}
 
 git merge origin/${MERGED_BRANCH}
