@@ -1,29 +1,31 @@
 #!/bin/bash
 
 function remove_remote() {
-  branch="$1"
-	origin_branches=$(git b -a | grep -e "origin/$branch")
+  for branch in "$@"; do
+    origin_branches=$(git b -a | grep -e "origin/$branch")
 
-	if [[ -z $origin_branches ]]; then
-    echo "Missing from origin - skipping $branch"
-	  return 0
-  fi
+    if [[ -z $origin_branches ]]; then
+      echo "Missing from origin - skipping $branch"
+      continue
+    fi
 
-  echo "Removing remote $branch"
-  git push origin --delete $(git branch | grep "$branch")
+    echo "Removing remote $branch"
+    git push origin --delete $(git branch | grep "$branch")
+  done
 }
 
 function remove_local() {
-  branch="$1"
-  local_branches=$(git b | grep -e "$branch")
+  for branch in "$@"; do
+    local_branches=$(git b | grep -e "$branch")
 
-  if [[ -z $local_branches ]]; then
-    echo "Missing from local - skipping $branch"
-    return 0
-  fi
+    if [[ -z $local_branches ]]; then
+      echo "Missing from local - skipping $branch"
+      continue
+    fi
 
-  echo "Removing local $branch"
-  git branch -D $(git branch | grep -e "$branch")
+    echo "Removing local $branch"
+    git branch -D $(git branch | grep -e "$branch")
+  done
 }
 
 if [[ -z "$1" || "$1" == "-h" ]]; then
@@ -98,8 +100,6 @@ elif [[ "$1" == "-r" ]]; then
 		done
 	fi
 else
-  branch="$1"
-
-  remove_remote $branch
-  remove_local $branch
+  remove_remote "$@"
+  remove_local "$@"
 fi
