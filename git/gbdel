@@ -2,29 +2,25 @@
 
 function remove_remote() {
   for branch in "$@"; do
-    origin_branches=$(git b -a | grep -e "origin/$branch")
-
-    if [[ -z $origin_branches ]]; then
+    if ! git show-ref --verify --quiet "refs/remotes/origin/$branch"; then
       echo "Missing from origin - skipping $branch"
       continue
     fi
 
     echo "Removing remote $branch"
-    git push origin --delete $(git branch | grep "$branch")
+    git push origin --delete "$branch"
   done
 }
 
 function remove_local() {
   for branch in "$@"; do
-    local_branches=$(git b | grep -e "$branch")
-
-    if [[ -z $local_branches ]]; then
+    if ! git show-ref --verify --quiet "refs/heads/$branch"; then
       echo "Missing from local - skipping $branch"
       continue
     fi
 
     echo "Removing local $branch"
-    git branch -D $(git branch | grep -e "$branch")
+    git branch -D "$branch"
   done
 }
 
@@ -39,7 +35,7 @@ if [[ -z "$1" || "$1" == "-h" ]]; then
 fi
 
 git fetch --all --prune
-CURRENT_BRANCH=$(git b | grep "*" | cut -d "/" -f 2)
+CURRENT_BRANCH=$(git branch --show-current)
 
 echo "Current branch: ${CURRENT_BRANCH}"
 echo ""
